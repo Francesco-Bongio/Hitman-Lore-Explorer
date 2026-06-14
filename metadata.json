@@ -1,0 +1,6 @@
+{
+  "name": "Hitman Lore Explorer",
+  "description": "Un'applicazione interattiva e immersiva per l'esplorazione dettagliata della trama, dei personaggi e dell'intrastoria della celebre saga videoludica di Hitman, guidata da un assistente AI intelligente.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
