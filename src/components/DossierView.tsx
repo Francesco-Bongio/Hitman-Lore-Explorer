@@ -109,6 +109,16 @@ export default function DossierView({ characters, onJumpToChapter }: DossierView
 
   // Current selected character object derived from the master list
   const selectedChar = masterCharactersList.find((c) => c.name === selectedCharName) || masterCharactersList[0];
+  const activeDescription = selectedChar.description;
+  const activeDetails = selectedChar.details;
+  
+  let defaultRisk = "Alto";
+  const extremeTargets = ["Arthur Edwards", "Dott. Otto Wolfgang Ort-Meyer", "Lee Hong", "Pablo Belisario Ochoa", "Benjamin Travis", "Blake Dexter"];
+  if (extremeTargets.includes(selectedChar.name)) defaultRisk = "Estremo";
+  else if (selectedChar.name.includes("Negotiator") || selectedChar.name.includes("Guilliani")) defaultRisk = "Medio";
+  else if (selectedChar.name === "Odon Kovacs") defaultRisk = "Basso";
+  
+  const activeRisk = defaultRisk;
 
   // Map the active character's appearances
   const appearances = CHRONOLOGY_MAPPING[selectedChar.name] || [];
@@ -127,12 +137,12 @@ DATE OF EXPORT: ${new Date().toISOString()}
 -----------------------------------------------------------------
 [+] BIOGRAPHICAL DELINEATION & INTELLIGENCE
 -----------------------------------------------------------------
-${selectedChar.description}
+${activeDescription}
 
 -----------------------------------------------------------------
 [+] OPERATIONAL LOGISTICS & CONFLICT
 -----------------------------------------------------------------
-${selectedChar.details}
+${activeDetails}
 
 -----------------------------------------------------------------
 [+] CHRONOLOGICAL RECORD
@@ -218,6 +228,9 @@ END OF FILE
               } else if (char.actorType === "neutral") {
                 alignmentColor = "text-cyan-500";
                 alignmentBg = "bg-cyan-950/20 border-cyan-905/40";
+              } else if (char.actorType === "target") {
+                alignmentColor = "text-orange-500";
+                alignmentBg = "bg-orange-950/20 border-orange-900/40";
               }
 
               return (
@@ -306,8 +319,18 @@ END OF FILE
                 <h3 className="font-display text-2xl font-black text-white mt-3 uppercase tracking-tight leading-none" id="selected-character-title">
                   {selectedChar.name}
                 </h3>
-                <p className="text-xs text-red-500 font-mono font-bold uppercase tracking-wider mt-1.5">
-                  ROLE // {selectedChar.role}
+                <p className="text-xs text-red-500 font-mono font-bold uppercase tracking-wider mt-1.5 flex flex-col sm:flex-row gap-2 sm:items-center">
+                  <span>ROLE // {selectedChar.role}</span>
+                  <span className="hidden sm:inline text-white/20">|</span>
+                  <span className={`inline-flex items-center px-1.5 py-0.5 rounded border text-[10px] font-bold tracking-widest ${
+                    activeRisk === "Estremo" ? "bg-red-500/10 text-red-500 border-red-500/20" :
+                    activeRisk === "Alto" ? "bg-orange-500/10 text-orange-400 border-orange-500/20" :
+                    activeRisk === "Medio" ? "bg-yellow-500/10 text-yellow-400 border-yellow-500/20" :
+                    activeRisk === "Basso" ? "bg-green-500/10 text-green-400 border-green-500/20" :
+                    "bg-slate-500/10 text-slate-400 border-slate-500/20"
+                  }`}>
+                    RISCHIO: {activeRisk.toUpperCase()}
+                  </span>
                 </p>
               </div>
               <button 
@@ -322,13 +345,15 @@ END OF FILE
 
             <div className="p-6 space-y-6">
               {/* Dossier section 1: Biography summary */}
-              <div className="bg-white/5 p-5 rounded-sm border-t border-white/10">
-                <h5 className="text-[10px] uppercase font-mono tracking-widest text-red-400 mb-2.5 flex items-center gap-1.5">
-                  <Shield className="w-4 h-4" />
-                  Delineamento Biografico & Intelligence
-                </h5>
-                <p className="text-slate-300 text-sm leading-relaxed" id="dossier-biography-text">
-                  {selectedChar.description}
+              <div className="bg-white/5 p-5 rounded-sm border-t border-white/10 relative">
+                <div className="flex items-center justify-between mb-2.5">
+                  <h5 className="text-[10px] uppercase font-mono tracking-widest text-red-400 flex items-center gap-1.5">
+                    <Shield className="w-4 h-4" />
+                    Delineamento Biografico & Intelligence
+                  </h5>
+                </div>
+                <p className="text-slate-300 text-sm leading-relaxed whitespace-pre-wrap" id="dossier-biography-text">
+                  {activeDescription}
                 </p>
               </div>
 
@@ -339,7 +364,7 @@ END OF FILE
                   LOGISTICA OPERATIVA & CONFLITTO
                 </h5>
                 <p className="text-slate-400 text-xs leading-relaxed font-mono whitespace-pre-line" id="dossier-conflict-text">
-                  {selectedChar.details}
+                  {activeDetails}
                 </p>
               </div>
 

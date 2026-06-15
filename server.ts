@@ -1,7 +1,7 @@
 import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI, ThinkingLevel } from "@google/genai";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -352,6 +352,8 @@ ${userQuery}
       config: {
         systemInstruction: systemPrompt,
         temperature: 0.75,
+        tools: [{ googleSearch: {} }],
+        toolConfig: { includeServerSideToolInvocations: true }
       }
     });
 
@@ -360,13 +362,20 @@ ${userQuery}
     });
 
   } catch (error: any) {
-    console.error("Errore nell'API Gemini per la chat (eseguo fallback locale):", error);
+    const errStr = error?.toString() || error?.message || "";
+    if (error?.status === 429 || errStr.includes("429") || errStr.includes("quota") || errStr.includes("RESOURCE_EXHAUSTED")) {
+      console.warn("Avviso (429): Quota API superata in chat, eseguo fallback locale.");
+    } else {
+      console.error("Errore nell'API Gemini per la chat (eseguo fallback locale):", error);
+    }
     // Return our glorious local immersive fallback
     return res.json({
       text: getLocalChatResponse(userQuery, userRoleSelection)
     });
   }
 });
+
+// No target-intel API anymore. Data provided from json import.
 
 // Interactive Connection Analysis endpoint
 app.post("/api/gemini/analyze", async (req, res) => {
@@ -398,11 +407,11 @@ Usa un tono freddo, professionale, degno di un report dell'ICA (International Co
 `;
 
     const response = await ai.models.generateContent({
-      model: "gemini-3.5-flash",
+      model: "gemini-3.1-pro-preview",
       contents: promptText,
       config: {
         systemInstruction: "Sei l'algoritmo di intelligence analitica ICA Analyzer. Esprimi report logici freddi, spietati e accurati.",
-        temperature: 0.5,
+        thinkingConfig: { thinkingLevel: ThinkingLevel.HIGH },
       }
     });
 
@@ -411,7 +420,12 @@ Usa un tono freddo, professionale, degno di un report dell'ICA (International Co
     });
 
   } catch (error: any) {
-    console.error("Errore nell'API Gemini per l'analisi (eseguo fallback locale):", error);
+    const errStr = error?.toString() || error?.message || "";
+    if (error?.status === 429 || errStr.includes("429") || errStr.includes("quota") || errStr.includes("RESOURCE_EXHAUSTED")) {
+      console.warn("Avviso (429): Quota API superata in analyze, eseguo fallback locale.");
+    } else {
+      console.error("Errore nell'API Gemini per l'analisi (eseguo fallback locale):", error);
+    }
     // Return our glorious local immersive fallback
     return res.json({
       text: getLocalAnalysisResult(itemA, itemB)

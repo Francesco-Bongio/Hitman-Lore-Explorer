@@ -13,7 +13,7 @@ export interface ChapterInfo {
 export interface CharacterInfo {
   name: string;
   role: string;
-  actorType: 'protagonist' | 'ally' | 'antagonist' | 'neutral';
+  actorType: 'protagonist' | 'ally' | 'antagonist' | 'neutral' | 'target';
   description: string;
   details: string;
 }
@@ -62,7 +62,7 @@ export const hitmanDataset: HitmanData = {
       year: "2000",
       gameTitle: "Hitman: Codename 47",
       summary: "L'evasione controllata di 47, il suo reclutamento all'ICA con Diana Burnwood, l'annientamento dei suoi quattro padri biologici e l'uccisione finale di Ort-Meyer.",
-      keyTargets: ["Lee Hong", "Pablo Belisario Ochoa", "Frantz Fuchs", "Arkadij Jegorov (Boris)", "Dr. Otto Wolfgang Ort-Meyer", "Dott. Kovacs"],
+      keyTargets: ["Red Dragon Negotiator", "Blue Lotus Negotiator", "Tzun", "Lee Hong", "Pablo Belisario Ochoa", "Frantz Fuchs", "Arkadij Jegorov (Boris)", "Odon Kovacs", "Dott. Otto Wolfgang Ort-Meyer", "Agenti 48"],
       locations: ["Hong Kong", "Colombia", "Budapest", "Rotterdam", "Romania"],
       importance: "Primo atto interattivo: 47 scopre la verità sulle sue origini, distrugge i suoi creatori e inizia ad operare come entità indipendente legata all'ICA.",
       details: [
@@ -78,7 +78,7 @@ export const hitmanDataset: HitmanData = {
       year: "2002",
       gameTitle: "Hitman 2: Silent Assassin",
       summary: "Il ritiro spirituale in Sicilia, il rapimento di Padre Vittorio, il ricatto della mafia russa e di Sergei Zavorotko, e il disincantato ritorno al mestiere di sicario.",
-      keyTargets: ["Membri mafiosi", "Hacker Malesi", "Eversori afghani", "Sergei Zavorotko"],
+      keyTargets: ["Giuseppe Guilliani", "Generale Makarov", "Generale Mikhail Bardachenko", "Masahiro Hayamoto Jr.", "Masahiro Hayamoto", "Charlie Sidjan", "Rutgert Van Leuven", "Dr. Von Kamprad", "Deewana Ji", "Abdul Bismillah Malik", "Tariq Abdul Lateef", "Mohammad Amin", "Sergei Zavorotko"],
       locations: ["Sicilia (Italia)", "San Pietroburgo (Russia)", "Giappone", "Malesia", "Afghanistan", "India"],
       importance: "Approfondisce il conflitto psicologico e religioso: la fede e l'isolamento monastico non possono sopprimere la natura genetica letale di 47.",
       details: [
@@ -94,7 +94,14 @@ export const hitmanDataset: HitmanData = {
       year: "2004 - 2006",
       gameTitle: "Hitman: Contracts / Blood Money",
       summary: "I deliri febbrili di Parigi dopo essere stato ferito da Albert Fournier, e lo scontro mortale tra l'ICA e il Franchise (Alpha Zerox) di Leland Cayne.",
-      keyTargets: ["Ispettore Albert Fournier", "Tenore D'Alvade", "Mark Purayah II", "Mark Parchezzi III", "Alexander Leland Cayne"],
+      keyTargets: [
+        "Campbell Sturrock", "Richard Delahunt", "Alvaro D'Alvade", "Winston Beldingford", "Alistair Beldingford",
+        "Richard Palmer", "Klaas Meier", "Frantz Fuchs", "Fritz Fuchs", "Fabian Fuchs", "Boris Jegorov", "Ispettore Albert Fournier",
+        "Joseph Clarence", "Fernando Delgado", "Manuel Delgado", "Deanna Hansen", "Carmine DeSalvo", "Vinnie Sinistra",
+        "Skip Muldoon", "Gator Boss", "Lorne de Havilland", "Chad Bingham Jr", "Hendrik Schmutz", "Mohammad Bin Shirao",
+        "Sheikh Al-Khalifa", "Tariq Abdul Lateef", "Mark Purayah II", "Raymond Kulinsky", "Angelina Mason", "Mark Parchezzi III",
+        "Alexander Leland Cayne", "Rick Henderson", "The Priest"
+      ],
       locations: ["Parigi (Francia)", "Rotterdam", "Siberia", "New Orleans", "Rocky Mountains", "Washington D.C. (Casa Bianca)"],
       importance: "Alpice drammatico: Diana si rivela un'alleata assoluta, usando un finto veleno funerario per resuscitare 47 che decima l'intera cabala del Franchise.",
       details: [
@@ -110,7 +117,12 @@ export const hitmanDataset: HitmanData = {
       year: "2012",
       gameTitle: "Hitman: Absolution",
       summary: "La corruzione interna all'ICA perpetrata da Benjamin Travis, il finto assassinio di Diana e la missione solitaria per proteggere l'adolescente Victoria.",
-      keyTargets: ["Benjamin Travis", "Blake Dexter", "The Saints", "I Pretoriani", "King of Chinatown"],
+      keyTargets: [
+        "King of Chinatown", "Dom Osmond", "Wade", "Lenny Dexter", "Sanchez", "LaSalle", "Lasandra Dixon",
+        "Heather McCarthy", "Diana Burnwood (falso bersaglio)", "Richard Strong Jr", "Frank Owens", "Gavin LeBlond",
+        "Mason McCready", "Luke Wheeley", "John Keasey", "Raymond Luger", "Edward P.Smith",
+        "Blake Dexter", "Benjamin Travis", "Jade Nguyen", "Clive Skurky"
+      ],
       locations: ["Chicago", "Hope (South Dakota)", "Cornovaglia (Inghilterra)"],
       importance: "Un viaggio profondamente personale: Victoria rappresenta il surrogato dell'innocenza perduta di 47, spingendolo alla diserzione morale contro i vertici deviati dell'ICA.",
       details: [
@@ -126,7 +138,17 @@ export const hitmanDataset: HitmanData = {
       year: "2019 - 2021",
       gameTitle: "Hitman (2016) / Hitman 2 / Hitman 3",
       summary: "Lo scontro apocalittico contro Providence (una cabala segreta globale), l'alleanza con il Cliente Ombra (Lucas Grey) e la distruzione definitiva dell'ICA.",
-      keyTargets: ["Viktor Novikov", "Erich Soders", "Arthur Edwards (La Costante)", "Marcus Stuyvesant", "Carl Ingram", "Alexa Carlisle", "Hush", "Imogen Royce", "Don Yates", "Tamara Vidal"],
+      keyTargets: [
+        "Viktor Novikov", "Dalia Margolis", "Silvio Caruso", "Francesca De Santis", "Claus Hugo Strandberg",
+        "Reza Zaydan", "Jordan Cross", "Ken Morgan", "Ezra Berg", "Penelope Graves", "Sean Rose", "Maya Parvati",
+        "Yuki Yamazaki", "Erich Soders",
+        "Alma Reynard", "Robert Knox", "Sierra Knox", "Rico Delgado", "Andrea Martinez", "Jorge Franco",
+        "Dawood Rangan", "Vanya Shah", "Wazir Kale", "Nolan Cassidy", "Janus", "Zoe Washington", "Sophia Washington",
+        "Athena Savalas", "Tyson Williams", "Steven Bradley", "Ljudmila Vetrova",
+        "Carl Ingram", "Marcus Stuyvesant", "Alexa Carlisle", "Agent Montgomery", "Agent Banner", "Agent Chamberlin",
+        "Agent Thames", "Agent Tremaine", "Agent Green", "Agent Swan", "Agent Davenport", "Agent Lowenthal", "Agent Rhodes",
+        "Hush", "Imogen Royce", "Don Yates", "Tamara Vidal", "Arthur Edwards"
+      ],
       locations: ["Parigi", "Sapienza", "Marrakesh", "Hokkaido (Giappone)", "Miami", "Mumbai", "Maldive (Haven)", "Dubai", "Dartmoor", "Berlino", "Chongqing", "Mendoza", "Monti Carpazi"],
       importance: "Il climax narrativo: unione di tutti i fili. Lucas Grey compie il sacrificio supremo. 47 distrugge il nucleo ICA e neutralizza Arthur Edwards in Romania.",
       details: [
@@ -225,3 +247,30 @@ export const hitmanDataset: HitmanData = {
   conclusion: "La conclusione semantica della saga di Hitman, illustrata nell'epilogo ambientato un anno dopo gli eventi dei monti Carpazi, certifica la totale emancipazione dell'Agente 47 e di Diana Burnwood. Svanite le istituzioni oppressive dell'ICA e della multinazionale di Providence, i due scelgono di ripartire da zero: un sodalizio freelance di impareggiabile efficacia, svincolato da logiche corporative, atto a colpire proattivamente i nuovi mali geopolitici ed eugenetici del pianeta. Un cammino di ascesa dal determinismo biologico originario alla libertà etica assoluta.",
   fullContent: `L'Evoluzione Narrativa e l'Intrastoria della Saga di Hitman: Un'Analisi Esaustiva...` // will represent full user input text for custom RAG or semantic reference
 };
+
+import { targetDetails } from "./targetDetails";
+import { documentDescriptions } from "./documentDescriptions";
+
+// Auto-populate characters with all keyTargets from chapters
+hitmanDataset.chapters.forEach(chapter => {
+  chapter.keyTargets.forEach(targetName => {
+    // Check if it already exists in characters
+    const exists = hitmanDataset.characters.some(c => c.name === targetName);
+    const inFathers = hitmanDataset.fiveFathers.some(f => f.name === targetName);
+    
+    if (!exists && !inFathers) {
+      const bioDetails = targetDetails[targetName] || {
+        description: `[DELINEAMENTO BIOGRAFICO]\n${documentDescriptions[targetName] || 'Profilo biografico riservato.'}`,
+        details: `[ANALISI OPERATIVA]\nIntercettato nel corso della campagna: ${chapter.gameTitle} (${chapter.year}).\n${documentDescriptions[targetName] ? 'Dettagli di missione estratti dai log generali ICA.' : 'Dati operativi frammentari o perduti, bersaglio eliminato con infallibilità del mestiere.'}`
+      };
+
+      hitmanDataset.characters.push({
+        name: targetName,
+        role: "Bersaglio ICA - Priority Target",
+        actorType: "target",
+        description: bioDetails.description,
+        details: bioDetails.details
+      });
+    }
+  });
+});
