@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ChapterInfo } from "../data/hitmanDataset";
-import { Calendar, MapPin, Target, Eye, ChevronRight, Award, FolderOpen, Shield, Dna, Lock, Terminal } from "lucide-react";
+import { Calendar, MapPin, Target, Eye, ChevronRight, Award, FolderOpen, Shield, Dna, Lock, Terminal, Download } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import InteractiveWorldMap from "./InteractiveWorldMap";
 
@@ -84,6 +84,61 @@ export default function TimelineView({ chapters, selectedId, onSelectId }: Timel
     philosophyTitle: "INTELLIGENCE FILOSOFICA ASSENTE",
     philosophyContent: "Il soggetto opera al di fuori dei filtri bioetici documentati.",
     secretCodexId: "ICA_UNKNOWN_CODE"
+  };
+
+  const handleExportTimeline = () => {
+    const content = `=================================================================
+             INTERNATIONAL CONTRACT AGENCY - SECURE DATABASE
+=================================================================
+FILE: CHRONICLE RECONSTRUCTION
+CHAPTER: ${activeChapter.gameTitle} (${activeChapter.year})
+TITLE: ${activeChapter.title}
+DATE OF EXPORT: ${new Date().toISOString()}
+
+-----------------------------------------------------------------
+[+] NARRATIVE SUMMARY
+-----------------------------------------------------------------
+${activeChapter.summary}
+
+-----------------------------------------------------------------
+[+] OPERATIONAL THEATERS
+-----------------------------------------------------------------
+${activeChapter.locations.length > 0 ? activeChapter.locations.join(', ') : 'None recorded'}
+
+-----------------------------------------------------------------
+[+] KEY TARGETS NEUTRALIZED
+-----------------------------------------------------------------
+${activeChapter.keyTargets.length > 0 ? activeChapter.keyTargets.join('\n') : 'None recorded'}
+
+-----------------------------------------------------------------
+[+] CHRONOLOGICAL EVENTS
+-----------------------------------------------------------------
+${activeChapter.details.map((d, i) => `[${String(i + 1).padStart(2, '0')}] ${d}`).join('\n')}
+
+-----------------------------------------------------------------
+[+] DECRYPTED LORE: ${lore.interceptTitle}
+-----------------------------------------------------------------
+META: ${lore.interceptMeta}
+${lore.interceptContent}
+
+-----------------------------------------------------------------
+[+] PHILOSOPHICAL SIGNIFICANCE: ${lore.philosophyTitle}
+-----------------------------------------------------------------
+${lore.philosophyContent}
+
+=================================================================
+END OF FILE
+=================================================================`;
+
+    const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `ICA_CHRONICLE_${activeChapter.id.toUpperCase()}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -231,6 +286,14 @@ export default function TimelineView({ chapters, selectedId, onSelectId }: Timel
                     {activeChapter.title}
                   </p>
                 </div>
+                <button 
+                  onClick={handleExportTimeline} 
+                  className="flex items-center gap-2 bg-red-950/40 hover:bg-red-900/60 flex-shrink-0 transition-colors border border-red-900/40 text-red-500 px-4 py-2 rounded-sm text-[10px] font-mono tracking-widest uppercase font-bold group"
+                  title="Scarica Evento Timeline come Documento Sicuro"
+                >
+                  <Download className="w-3.5 h-3.5 group-hover:-translate-y-0.5 transition-transform" />
+                  <span>Export Report</span>
+                </button>
               </div>
 
               {/* INTERACTIVE LORE SWITCHER BAR */}

@@ -497,8 +497,12 @@ export default function InteractiveWorldMap({ chapters, selectedChapterId, onSel
                     {getChaptersForPin(selectedPin.id, chapters).map((ch) => (
                       <button
                         key={ch.id}
-                        onClick={() => onSelectChapterId(ch.id)}
-                        className={`w-full text-left p-2 rounded-sm border text-xs font-mono transition-all flex items-center justify-between ${
+                        onClick={() => {
+                          onSelectChapterId(ch.id);
+                          // Scroll to the top of the timeline to see the result
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}
+                        className={`w-full cursor-pointer text-left p-2 rounded-sm border text-xs font-mono transition-all flex items-center justify-between ${
                           ch.id === selectedChapterId
                             ? "bg-red-950/20 border-red-950 text-red-400"
                             : "bg-black/40 border-white/5 text-slate-400 hover:text-white hover:border-white/10"

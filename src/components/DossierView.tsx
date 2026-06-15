@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { CharacterInfo } from "../data/hitmanDataset";
-import { User, Shield, Compass, ArrowRight, Search, ExternalLink, Calendar } from "lucide-react";
+import { User, Shield, Compass, ArrowRight, Search, ExternalLink, Calendar, Download } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 interface DossierViewProps {
@@ -112,6 +112,49 @@ export default function DossierView({ characters, onJumpToChapter }: DossierView
 
   // Map the active character's appearances
   const appearances = CHRONOLOGY_MAPPING[selectedChar.name] || [];
+
+  const handleExportDossier = () => {
+    const content = `=================================================================
+             INTERNATIONAL CONTRACT AGENCY - SECURE DATABASE
+=================================================================
+FILE: DOSSIER RECORD
+SUBJECT: ${selectedChar.name}
+ROLE: ${selectedChar.role}
+ALIGNMENT: ${selectedChar.actorType.toUpperCase()}
+CLASSIFICATION: LEVEL 5 (ICA RESTRICTED)
+DATE OF EXPORT: ${new Date().toISOString()}
+
+-----------------------------------------------------------------
+[+] BIOGRAPHICAL DELINEATION & INTELLIGENCE
+-----------------------------------------------------------------
+${selectedChar.description}
+
+-----------------------------------------------------------------
+[+] OPERATIONAL LOGISTICS & CONFLICT
+-----------------------------------------------------------------
+${selectedChar.details}
+
+-----------------------------------------------------------------
+[+] CHRONOLOGICAL RECORD
+-----------------------------------------------------------------
+${appearances.length > 0 
+  ? appearances.map(a => `[${a.year}] ${a.title}\nRole: ${a.role}`).join('\n\n')
+  : 'No specific chronological records found.'}
+
+=================================================================
+END OF FILE
+=================================================================`;
+
+    const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `ICA_DOSSIER_${selectedChar.name.replace(/\s+/g, '_').toUpperCase()}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -267,6 +310,14 @@ export default function DossierView({ characters, onJumpToChapter }: DossierView
                   ROLE // {selectedChar.role}
                 </p>
               </div>
+              <button 
+                onClick={handleExportDossier} 
+                className="flex items-center gap-2 bg-red-950/40 hover:bg-red-900/60 transition-colors border border-red-900/40 text-red-500 px-4 py-2 flex-shrink-0 rounded-sm text-[10px] font-mono tracking-widest uppercase font-bold group"
+                title="Scarica Fascicolo ICA come Documento Sicuro"
+              >
+                <Download className="w-3.5 h-3.5 group-hover:-translate-y-0.5 transition-transform" />
+                <span>Export Report</span>
+              </button>
             </div>
 
             <div className="p-6 space-y-6">
