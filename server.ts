@@ -351,8 +351,7 @@ ${userQuery}
       contents: promptWithHistory,
       config: {
         systemInstruction: systemPrompt,
-        temperature: 0.75,
-        tools: [{ googleSearch: {} }]
+        temperature: 0.75
       }
     });
 
@@ -362,8 +361,8 @@ ${userQuery}
 
   } catch (error: any) {
     const errStr = error?.toString() || error?.message || "";
-    if (error?.status === 429 || errStr.includes("429") || errStr.includes("quota") || errStr.includes("RESOURCE_EXHAUSTED")) {
-      console.warn("Avviso (429): Quota API superata in chat, eseguo fallback locale.");
+    if (error?.status === 429 || errStr.includes("429") || errStr.includes("quota") || errStr.includes("RESOURCE_EXHAUSTED") || error?.status === 503 || errStr.includes("503") || errStr.includes("UNAVAILABLE")) {
+      console.warn("Avviso (API limitata): superata quota o server carico, eseguo fallback locale.");
     } else {
       console.error("Errore nell'API Gemini per la chat (eseguo fallback locale):", error);
     }
@@ -409,8 +408,7 @@ Usa un tono freddo, professionale, degno di un report dell'ICA (International Co
       model: "gemini-2.5-flash",
       contents: promptText,
       config: {
-        systemInstruction: "Sei l'algoritmo di intelligence analitica ICA Analyzer. Esprimi report logici freddi, spietati e accurati.",
-        thinkingConfig: { thinkingLevel: ThinkingLevel.HIGH },
+        systemInstruction: "Sei l'algoritmo di intelligence analitica ICA Analyzer. Esprimi report logici freddi, spietati e accurati."
       }
     });
 
@@ -420,8 +418,8 @@ Usa un tono freddo, professionale, degno di un report dell'ICA (International Co
 
   } catch (error: any) {
     const errStr = error?.toString() || error?.message || "";
-    if (error?.status === 429 || errStr.includes("429") || errStr.includes("quota") || errStr.includes("RESOURCE_EXHAUSTED")) {
-      console.warn("Avviso (429): Quota API superata in analyze, eseguo fallback locale.");
+    if (error?.status === 429 || errStr.includes("429") || errStr.includes("quota") || errStr.includes("RESOURCE_EXHAUSTED") || error?.status === 503 || errStr.includes("503") || errStr.includes("UNAVAILABLE")) {
+      console.warn("Avviso (API limitata): superata quota o server carico (analyze), eseguo fallback locale.");
     } else {
       console.error("Errore nell'API Gemini per l'analisi (eseguo fallback locale):", error);
     }
