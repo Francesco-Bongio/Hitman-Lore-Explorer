@@ -347,13 +347,12 @@ ${userQuery}
 `;
 
     const response = await ai.models.generateContent({
-      model: "gemini-3.5-flash",
+      model: "gemini-2.5-flash",
       contents: promptWithHistory,
       config: {
         systemInstruction: systemPrompt,
         temperature: 0.75,
-        tools: [{ googleSearch: {} }],
-        toolConfig: { includeServerSideToolInvocations: true }
+        tools: [{ googleSearch: {} }]
       }
     });
 
@@ -407,7 +406,7 @@ Usa un tono freddo, professionale, degno di un report dell'ICA (International Co
 `;
 
     const response = await ai.models.generateContent({
-      model: "gemini-3.1-pro-preview",
+      model: "gemini-2.5-flash",
       contents: promptText,
       config: {
         systemInstruction: "Sei l'algoritmo di intelligence analitica ICA Analyzer. Esprimi report logici freddi, spietati e accurati.",
