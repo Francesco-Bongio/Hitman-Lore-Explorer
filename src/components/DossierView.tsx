@@ -2,6 +2,7 @@ import { useState } from "react";
 import { CharacterInfo } from "../data/hitmanDataset";
 import { User, Shield, Compass, ArrowRight, Search, ExternalLink, Calendar, Download } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { exportDossierPDF } from "../utils/pdfExport";
 
 interface DossierViewProps {
   characters: CharacterInfo[];
@@ -124,46 +125,7 @@ export default function DossierView({ characters, onJumpToChapter }: DossierView
   const appearances = CHRONOLOGY_MAPPING[selectedChar.name] || [];
 
   const handleExportDossier = () => {
-    const content = `=================================================================
-             INTERNATIONAL CONTRACT AGENCY - SECURE DATABASE
-=================================================================
-FILE: DOSSIER RECORD
-SUBJECT: ${selectedChar.name}
-ROLE: ${selectedChar.role}
-ALIGNMENT: ${selectedChar.actorType.toUpperCase()}
-CLASSIFICATION: LEVEL 5 (ICA RESTRICTED)
-DATE OF EXPORT: ${new Date().toISOString()}
-
------------------------------------------------------------------
-[+] BIOGRAPHICAL DELINEATION & INTELLIGENCE
------------------------------------------------------------------
-${activeDescription}
-
------------------------------------------------------------------
-[+] OPERATIONAL LOGISTICS & CONFLICT
------------------------------------------------------------------
-${activeDetails}
-
------------------------------------------------------------------
-[+] CHRONOLOGICAL RECORD
------------------------------------------------------------------
-${appearances.length > 0 
-  ? appearances.map(a => `[${a.year}] ${a.title}\nRole: ${a.role}`).join('\n\n')
-  : 'No specific chronological records found.'}
-
-=================================================================
-END OF FILE
-=================================================================`;
-
-    const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `ICA_DOSSIER_${selectedChar.name.replace(/\s+/g, '_').toUpperCase()}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    exportDossierPDF(selectedChar, appearances, activeDescription, activeDetails);
   };
 
   return (

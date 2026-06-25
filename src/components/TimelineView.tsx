@@ -3,6 +3,7 @@ import { ChapterInfo } from "../data/hitmanDataset";
 import { Calendar, MapPin, Target, Eye, ChevronRight, Award, FolderOpen, Shield, Dna, Lock, Terminal, Download } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import InteractiveWorldMap from "./InteractiveWorldMap";
+import { exportTimelinePDF } from "../utils/pdfExport";
 
 interface TimelineViewProps {
   chapters: ChapterInfo[];
@@ -87,58 +88,7 @@ export default function TimelineView({ chapters, selectedId, onSelectId }: Timel
   };
 
   const handleExportTimeline = () => {
-    const content = `=================================================================
-             INTERNATIONAL CONTRACT AGENCY - SECURE DATABASE
-=================================================================
-FILE: CHRONICLE RECONSTRUCTION
-CHAPTER: ${activeChapter.gameTitle} (${activeChapter.year})
-TITLE: ${activeChapter.title}
-DATE OF EXPORT: ${new Date().toISOString()}
-
------------------------------------------------------------------
-[+] NARRATIVE SUMMARY
------------------------------------------------------------------
-${activeChapter.summary}
-
------------------------------------------------------------------
-[+] OPERATIONAL THEATERS
------------------------------------------------------------------
-${activeChapter.locations.length > 0 ? activeChapter.locations.join(', ') : 'None recorded'}
-
------------------------------------------------------------------
-[+] KEY TARGETS NEUTRALIZED
------------------------------------------------------------------
-${activeChapter.keyTargets.length > 0 ? activeChapter.keyTargets.join('\n') : 'None recorded'}
-
------------------------------------------------------------------
-[+] CHRONOLOGICAL EVENTS
------------------------------------------------------------------
-${activeChapter.details.map((d, i) => `[${String(i + 1).padStart(2, '0')}] ${d}`).join('\n')}
-
------------------------------------------------------------------
-[+] DECRYPTED LORE: ${lore.interceptTitle}
------------------------------------------------------------------
-META: ${lore.interceptMeta}
-${lore.interceptContent}
-
------------------------------------------------------------------
-[+] PHILOSOPHICAL SIGNIFICANCE: ${lore.philosophyTitle}
------------------------------------------------------------------
-${lore.philosophyContent}
-
-=================================================================
-END OF FILE
-=================================================================`;
-
-    const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `ICA_CHRONICLE_${activeChapter.id.toUpperCase()}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    exportTimelinePDF(activeChapter, activeLayer, lore);
   };
 
   return (
