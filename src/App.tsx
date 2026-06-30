@@ -35,9 +35,20 @@ export default function App() {
       <header className="h-20 border-b border-white/5 bg-black/40 backdrop-blur-md sticky top-0 z-50 flex items-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-5">
-            {/* Immersive Crosshair Insignia */}
-            <div className="w-10 h-10 border-2 border-red-600/80 flex items-center justify-center flex-shrink-0">
-              <div className="w-6 h-6 border-t-2 border-l-2 border-red-600 rotate-45 transform translate-x-1 translate-y-1" />
+            {/* Authentic Barcode Insignia */}
+            <div className="flex flex-col items-center justify-center p-1.5 bg-white/5 border border-white/10 rounded-sm shadow-inner shadow-black/50 hover:bg-white/10 transition-colors">
+              <svg viewBox="0 0 100 50" className="w-11 h-[22px] text-slate-200" fill="currentColor">
+                <rect x="2" y="0" width="8" height="50" />
+                <rect x="14" y="0" width="4" height="50" />
+                <rect x="22" y="0" width="10" height="50" />
+                <rect x="36" y="0" width="4" height="50" />
+                <rect x="44" y="0" width="12" height="50" />
+                <rect x="60" y="0" width="6" height="50" />
+                <rect x="70" y="0" width="8" height="50" />
+                <rect x="82" y="0" width="4" height="50" />
+                <rect x="90" y="0" width="8" height="50" />
+              </svg>
+              <div className="mt-1 text-[7px] tracking-[0.25em] font-mono text-red-600 font-bold ml-1">640509-040147</div>
             </div>
             <div>
               <h1 className="font-display font-medium text-lg leading-none tracking-[0.25em] text-white uppercase sm:text-xl">
