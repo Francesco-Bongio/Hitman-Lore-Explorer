@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { ChapterInfo } from "../data/hitmanDataset";
-import { Calendar, MapPin, Target, Eye, ChevronRight, Award, FolderOpen, Shield, Dna, Lock, Terminal, Download } from "lucide-react";
+import { Calendar, MapPin, Target, Eye, ChevronRight, Award, FolderOpen, Shield, Dna, Lock, Terminal, Download, Crosshair } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import InteractiveWorldMap from "./InteractiveWorldMap";
+import MissionBriefing from "./MissionBriefing";
 import { exportTimelinePDF } from "../utils/pdfExport";
 
 interface TimelineViewProps {
@@ -71,12 +72,12 @@ const ADDITIONAL_LORE_DB: Record<string, AdditionalLore> = {
   }
 };
 
-type LoreLayerTab = "objectives" | "intercepts" | "philosophy";
+type LoreLayerTab = "briefing" | "objectives" | "intercepts" | "philosophy";
 
 export default function TimelineView({ chapters, selectedId, onSelectId }: TimelineViewProps) {
   const activeChapter = chapters.find((c) => c.id === selectedId) || chapters[0];
   const activeChapterIndex = chapters.findIndex((c) => c.id === selectedId);
-  const [activeLayer, setActiveLayer] = useState<LoreLayerTab>("objectives");
+  const [activeLayer, setActiveLayer] = useState<LoreLayerTab>("briefing");
 
   const lore = ADDITIONAL_LORE_DB[activeChapter.id] || {
     interceptTitle: "DECRIPTATO // ARCHIVIO SECUTOR",
@@ -236,21 +237,49 @@ export default function TimelineView({ chapters, selectedId, onSelectId }: Timel
                     {activeChapter.title}
                   </p>
                 </div>
-                <button 
-                  onClick={handleExportTimeline} 
-                  className="flex items-center gap-2 bg-red-950/40 hover:bg-red-900/60 flex-shrink-0 transition-colors border border-red-900/40 text-red-500 px-4 py-2 rounded-sm text-[10px] font-mono tracking-widest uppercase font-bold group"
-                  title="Scarica Evento Timeline come Documento Sicuro"
-                >
-                  <Download className="w-3.5 h-3.5 group-hover:-translate-y-0.5 transition-transform" />
-                  <span>Export Report</span>
-                </button>
+                <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+                  <button 
+                    onClick={() => setActiveLayer("briefing")}
+                    className={`flex items-center gap-1.5 px-3 py-2 rounded-sm text-[10px] font-mono tracking-widest uppercase font-bold transition-all border ${
+                      activeLayer === "briefing"
+                        ? "bg-red-650 text-white border-red-500 shadow-[0_0_12px_rgba(239,68,68,0.4)]"
+                        : "bg-black/60 text-slate-300 hover:text-white hover:bg-white/10 border-white/10"
+                    }`}
+                    title="Visualizza Mission Briefing con Loadout e Obiettivi"
+                    id="quick-mission-briefing-btn"
+                  >
+                    <Crosshair className="w-3.5 h-3.5 text-red-400" />
+                    <span>Mission Briefing</span>
+                  </button>
+
+                  <button 
+                    onClick={handleExportTimeline} 
+                    className="flex items-center gap-2 bg-red-950/40 hover:bg-red-900/60 flex-shrink-0 transition-colors border border-red-900/40 text-red-500 px-3.5 py-2 rounded-sm text-[10px] font-mono tracking-widest uppercase font-bold group"
+                    title="Scarica Evento Timeline come Documento Sicuro"
+                  >
+                    <Download className="w-3.5 h-3.5 group-hover:-translate-y-0.5 transition-transform" />
+                    <span>Export Report</span>
+                  </button>
+                </div>
               </div>
 
               {/* INTERACTIVE LORE SWITCHER BAR */}
-              <div className="flex border-b border-white/5 bg-black/10 text-xs font-mono font-bold uppercase tracking-wider">
+              <div className="flex border-b border-white/5 bg-black/10 text-xs font-mono font-bold uppercase tracking-wider overflow-x-auto">
+                <button
+                  onClick={() => setActiveLayer("briefing")}
+                  className={`flex-1 min-w-[140px] py-3 text-center border-b-2 transition-all flex items-center justify-center gap-2 ${
+                    activeLayer === "briefing"
+                      ? "text-red-500 border-red-600 bg-white/5 font-extrabold"
+                      : "text-slate-500 border-transparent hover:text-slate-300"
+                  }`}
+                  id="tab-lore-briefing"
+                >
+                  <Crosshair className="w-3.5 h-3.5" />
+                  <span>Briefing Missione</span>
+                </button>
                 <button
                   onClick={() => setActiveLayer("objectives")}
-                  className={`flex-1 py-3 text-center border-b-2 transition-all flex items-center justify-center gap-2 ${
+                  className={`flex-1 min-w-[140px] py-3 text-center border-b-2 transition-all flex items-center justify-center gap-2 ${
                     activeLayer === "objectives"
                       ? "text-red-500 border-red-600 bg-white/5 font-extrabold"
                       : "text-slate-500 border-transparent hover:text-slate-300"
@@ -258,11 +287,11 @@ export default function TimelineView({ chapters, selectedId, onSelectId }: Timel
                   id="tab-lore-objectives"
                 >
                   <FolderOpen className="w-3.5 h-3.5" />
-                  <span>Obiettivi & Missioni</span>
+                  <span>Obiettivi & Trama</span>
                 </button>
                 <button
                   onClick={() => setActiveLayer("intercepts")}
-                  className={`flex-1 py-3 text-center border-b-2 transition-all flex items-center justify-center gap-2 ${
+                  className={`flex-1 min-w-[140px] py-3 text-center border-b-2 transition-all flex items-center justify-center gap-2 ${
                     activeLayer === "intercepts"
                       ? "text-red-500 border-red-600 bg-white/5 font-extrabold"
                       : "text-slate-500 border-transparent hover:text-slate-300"
@@ -274,7 +303,7 @@ export default function TimelineView({ chapters, selectedId, onSelectId }: Timel
                 </button>
                 <button
                   onClick={() => setActiveLayer("philosophy")}
-                  className={`flex-1 py-3 text-center border-b-2 transition-all flex items-center justify-center gap-2 ${
+                  className={`flex-1 min-w-[140px] py-3 text-center border-b-2 transition-all flex items-center justify-center gap-2 ${
                     activeLayer === "philosophy"
                       ? "text-red-500 border-red-600 bg-white/5 font-extrabold"
                       : "text-slate-500 border-transparent hover:text-slate-300"
@@ -289,6 +318,18 @@ export default function TimelineView({ chapters, selectedId, onSelectId }: Timel
               {/* Layer Display Body */}
               <div className="p-6 space-y-6">
                 <AnimatePresence mode="wait">
+                  {activeLayer === "briefing" && (
+                    <motion.div
+                      key="briefing"
+                      initial={{ opacity: 0, scale: 0.98 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.98 }}
+                      transition={{ duration: 0.15 }}
+                    >
+                      <MissionBriefing chapter={activeChapter} />
+                    </motion.div>
+                  )}
+
                   {activeLayer === "objectives" && (
                     <motion.div
                       key="objectives"
